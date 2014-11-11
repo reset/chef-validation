@@ -14,8 +14,10 @@ module Chef::Validation
       # @return [Hash]
       def run(node, metadata)
         errors = {}
-        metadata.attributes.each do |attribute, options|
-          errors[attribute] = validate(node, attribute, options)
+        metadata.attributes.each do |attribute, rules|
+          unless (err = validate(node, attribute, rules)).empty?
+            errors[attribute] = err
+          end
         end
         errors
       end
@@ -35,14 +37,14 @@ module Chef::Validation
         value  = HashExt.dig(node.attributes, name, ATTR_SEPARATOR)
         errors = []
 
-        if (rules[:required] == "required" || rules[:required] == true)
-          errors = validate_required(value, name, errors)
+        if (rules["required"] == "required" || rules["required"] == true)
+          errors += validate_required(value, name)
         end
-        unless rules[:type].nil?
-          errors = validate_type(value, rules[:type], name, errors)
+        unless rules["type"].nil?
+          errors += validate_type(value, rules["type"], name)
         end
-        unless rules[:choice].nil? || rules[:choice].empty?
-          errors = validate_choice(value, rules[:choice], name, errors)
+        unless rules["choice"].nil? || rules["choice"].empty?
+          errors += validate_choice(value, rules["choice"], name)
         end
 
         errors
@@ -58,19 +60,21 @@ module Chef::Validation
         BOOLEAN        = "boolean".freeze
         NUMERIC        = "numeric".freeze
 
-        def validate_choice(value, choices, name, errors)
+        def validate_choice(value, choices, name, errors = [])
           unless choices.include?(value)
-            errors << "#{name} must be one of the following choices: #{choices.join(", ")}. Got: #{value}"
+            errors << "Must be one of the following choices: #{choices.join(", ")}."
           end
           errors
         end
 
-        def validate_required(value, name, errors)
-          errors << "#{name} is a required attribute but was nil." if value.nil?
+        def validate_required(value, name, errors = [])
+          if value.empty? || value.nil?
+            errors << "Required attribute but was not present."
+          end
           errors
         end
 
-        def validate_type(value, type, name, errors)
+        def validate_type(value, type, name, errors = [])
           state = nil
           case type.downcase
           when STRING
@@ -90,7 +94,7 @@ module Chef::Validation
           end
 
           if state == :error
-            errors << "#{name} is supposed to be of type '#{type}' but got: #{value.class}"
+            errors << "Must be of type '#{type}' but got: #{value.class}."
           end
           errors
         end

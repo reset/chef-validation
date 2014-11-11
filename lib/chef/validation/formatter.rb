@@ -11,10 +11,13 @@ module Chef::Validation
         msg = []
         msg << "Attribute Validation failure report:"
         msg << ""
-        errors.each do |cookbook, attr_errors|
-          msg << "  # '#{cookbook}' had (#{attr_errors.length}) error(s)."
-          attr_errors.each do |name, err|
-            msg << "    * #{name} - #{err}"
+        errors.each do |cookbook, attrs|
+          msg << "  # '#{cookbook}' failed validation for (#{attrs.length}) attribute(s)."
+          attrs.each do |name, errs|
+            msg << "    * #{name}"
+            errs.each do |err|
+              msg << "      - #{err}"
+            end
           end
         end
         msg.join("\n")
