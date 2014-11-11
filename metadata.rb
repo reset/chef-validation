@@ -8,3 +8,6 @@ license          "MIT"
 description      "Perform validation on your node's attributes from a Cookbook's attribute metadata definitions."
 long_description "Perform validation on your node's attributes from a Cookbook's attribute metadata definitions."
 version           Chef::Validation::VERSION
+
+supports "ubuntu"
+supports "centos"

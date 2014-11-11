@@ -5,6 +5,7 @@ Perform validation on your node's attributes from a Cookbook's attribute metadat
 ## Supported Platforms
 
 * Ubuntu 12.04 / 14.04
+* CentOS
 
 ## Usage
 
