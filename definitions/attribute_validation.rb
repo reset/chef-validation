@@ -17,13 +17,8 @@ define :attribute_validation, mode: :converge, cookbook: nil do
       Chef::Validation.validate(node, params[:cookbook])
     end
     unless errors.empty?
-      formatted = Chef::Validation.format_errors(errors)
+      formatted = Chef::Validation::Formatter.format_errors(errors)
       Chef::Application.fatal!(formatted)
-    end
-    if params[:cookbook].nil?
-      Chef::Log.debug("attribute validation success for all cookbooks (compile time)")
-    else
-      Chef::Log.debug("attribute validation success for '#{params[:cookbook]}' (compile time)")
     end
   else
     if params[:cookbook].nil?
@@ -31,10 +26,9 @@ define :attribute_validation, mode: :converge, cookbook: nil do
         block do
           errors = Chef::Validation.validate(node)
           unless errors.empty?
-            formatted = Chef::Validation.format_errors(errors)
+            formatted = Chef::Validation::Formatter.format_errors(errors)
             Chef::Application.fatal!(formatted)
           end
-          Chef::Log.debug("attribute validation success for all cookbooks (convergence time)")
         end
       end
     else
@@ -42,10 +36,9 @@ define :attribute_validation, mode: :converge, cookbook: nil do
         block do
           errors = Chef::Validation.validate(node, params[:cookbook])
           unless errors.empty?
-            formatted = Chef::Validation.format_errors(errors)
+            formatted = Chef::Validation::Formatter.format_errors(errors)
             Chef::Application.fatal!(formatted)
           end
-          Chef::Log.debug("attribute validation success for '#{params[:cookbook]}' (convergence time)")
         end
       end
     end
