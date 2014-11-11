@@ -1,6 +1,6 @@
 # validation-cookbook
 
-TODO: Enter the cookbook description here.
+Perform validation on your node's attributes from a Cookbook's attribute metadata definitions.
 
 ## Supported Platforms
 

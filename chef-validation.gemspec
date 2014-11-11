@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Chef::Validation::VERSION
   spec.authors       = ["Jamie Winsor"]
   spec.email         = ["jamie@vialstudios.com"]
-  spec.summary       = %q{Perform validation on your Cookbook's attributes.}
-  spec.description   = %q{Perform validation on your Cookbook's attributes.}
+  spec.summary       = %q{Perform validation on your node's attributes from a Cookbook's attribute metadata definitions.}
+  spec.description   = %q{Perform validation on your node's attributes from a Cookbook's attribute metadata definitions.}
   spec.homepage      = "https://github.com/reset/chef-validation"
   spec.license       = "MIT"
 

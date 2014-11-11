@@ -5,6 +5,6 @@ name             "validation"
 maintainer       "Jamie Winsor"
 maintainer_email "jamie@vialstudios.com"
 license          "MIT"
-description      "Installs/Configures validation"
-long_description "Installs/Configures validation"
+description      "Perform validation on your node's attributes from a Cookbook's attribute metadata definitions."
+long_description "Perform validation on your node's attributes from a Cookbook's attribute metadata definitions."
 version           Chef::Validation::VERSION
