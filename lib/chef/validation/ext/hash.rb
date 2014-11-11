@@ -1,4 +1,4 @@
-module ChefValidation
+module Chef::Validation
   module HashExt
     class << self
       # Return the value of the nested hash key from the given dotted path

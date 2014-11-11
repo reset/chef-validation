@@ -8,9 +8,9 @@
 #
 
 class Chef
-  module ChefValidation
+  module Validation
     class << self
-      def version(node)
+      def cookbook_version(node)
         node.run_context.cookbook_collection["validation"].metadata.version
       end
     end

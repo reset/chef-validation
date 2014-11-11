@@ -1,6 +1,17 @@
-module ChefValidation
+module Chef::Validation
   module Validator
     class << self
+      # Validates that the given node object satisfies all of the attribute constraints
+      # found in the given metadata.
+      #
+      # Returns a hash containing key/value pairs where the keys are the name of an
+      # attribute which was not properly set on the node object and the values are
+      # errors that were generated for that attribute.
+      #
+      # @param [Chef::Node] node
+      # @param [Chef::Metadata] metadata
+      #
+      # @return [Hash]
       def run(node, metadata)
         errors = {}
         metadata.attributes.each do |attribute, options|
@@ -9,25 +20,32 @@ module ChefValidation
         errors
       end
 
-      def validate(node, name, options)
+      # Validates that the given node object passes the given validation rules for
+      # the given attribute name.
+      #
+      # @param [Chef::Node] node
+      #   node to validate
+      # @param [String] name
+      #   name of the attribute to validate
+      # @param [Hash] rules
+      #   a hash of rules (defined by the metadata of a cookbook)
+      #
+      # @return [Array<String>]
+      def validate(node, name, rules)
         value  = HashExt.dig(node.attributes, name, ATTR_SEPARATOR)
         errors = []
 
-        if (options[:required] == "required" || options[:required] == true)
+        if (rules[:required] == "required" || rules[:required] == true)
           errors = validate_required(value, name, errors)
         end
-        unless options[:type].nil?
-          errors = validate_type(value, options[:type], name, errors)
+        unless rules[:type].nil?
+          errors = validate_type(value, rules[:type], name, errors)
         end
-        unless options[:choice].nil? || options[:choice].empty?
-          errors = validate_choice(value, options[:choice], name, errors)
+        unless rules[:choice].nil? || rules[:choice].empty?
+          errors = validate_choice(value, rules[:choice], name, errors)
         end
 
         errors
-      end
-
-      def has_key?(node, parts)
-        HashExt.dig(node, name, ATTR_SEPARATOR)
       end
 
       private

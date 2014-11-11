@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'chef-validation/version'
+require 'chef/validation/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "chef-validation"
-  spec.version       = ChefValidation::VERSION
+  spec.version       = Chef::Validation::VERSION
   spec.authors       = ["Jamie Winsor"]
   spec.email         = ["jamie@vialstudios.com"]
   spec.summary       = %q{Perform validation on your Cookbook's attributes.}

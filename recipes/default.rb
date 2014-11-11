@@ -8,7 +8,7 @@
 #
 
 chef_gem "chef-validation" do
-  version Chef::ChefValidation.version(node)
+  version Chef::Validation.cookbook_version(node)
   options "--ignore-dependencies"
   action :nothing
 end.run_action(:install)
