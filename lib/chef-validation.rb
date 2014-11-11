@@ -10,6 +10,19 @@ module ChefValidation
       cookbook.nil? ? validate_all(node) : validate_one(node, cookbook)
     end
 
+    def format_errors(errors)
+      msg = []
+      msg << "Attribute Validation failure report:"
+      msg << ""
+      errors.each do |cookbook, attr_errors|
+        msg << "  # '#{cookbook}' had (#{attr_errors.length}) error(s)."
+        attr_errors.each do |name, err|
+          msg << "    * #{name} - #{err}"
+        end
+      end
+      msg.join("\n")
+    end
+
     private
 
       def validate_all(node)

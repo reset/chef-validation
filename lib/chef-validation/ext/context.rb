@@ -6,7 +6,7 @@ module ChefValidation
       end
 
       def cookbooks(context)
-        context.cookbook_collection.collect { |k, v| k }
+        context.cookbook_collection.collect { |k, v| v }
       end
     end
   end
