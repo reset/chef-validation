@@ -9,7 +9,7 @@ Perform validation on your node's attributes from a Cookbook's attribute metadat
 
 ## Usage
 
-Add the validation cookbook to your cookbook's metadata
+Add the validation cookbook to your cookbook's metadata and define your attribute rules:
 
 ```
 name             "my_app"
@@ -21,13 +21,33 @@ long_description "Installs/Configures my_app"
 version          "0.1.0"
 
 depends "validation"
+
+grouping "my_app",
+  title: "My Application"
+attribute "my_app/log_level",
+  required: "required",
+  default: "debug",
+  choices: [
+    "debug",
+    "fatal",
+    "warn",
+    "info"
+  ]
+attribute "my_app/cookie",
+  required: "required",
+  default: "",
+  type: "string"
 ```
 
-Now leverage the `validate_attributes` definition provided by the validation cookbook by placing it in one of your cookbook's recipes.
+Attribute rules are already part of Chef metadata. However, they are not used at all by the Chef client application itself. You'll need to ensure that you still initialize attributes to their supposedly default value in an attributes file or a recipe.
+
+Since Chef client doesn't do anything with these attribute definitions we need to leverage the `validate_attributes` definition provided by this cookbook. Place a line like this in one of your cookbook's recipes.
 
 ```
 validate_attributes "my_app"
 ```
+
+I recommend placing this in the top of your "default" recipe for each cookbook that you maintain.
 
 ### Compile time validation
 
