@@ -1,3 +1,12 @@
+#
+# Cookbook Name:: validation
+# Definition:: attribute_validation
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2014 Jamie Winsor
+#
+
 define :attribute_validation, mode: :converge do
   if params[:mode] == :compile
     Chef::Log.info("attribute-validateion: compile time")

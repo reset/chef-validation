@@ -4,7 +4,7 @@ TODO: Enter the cookbook description here.
 
 ## Supported Platforms
 
-TODO: List your supported platforms.
+* Ubuntu 12.04 / 14.04
 
 ## Attributes
 
@@ -39,4 +39,4 @@ Include `validation` in your node's `run_list`:
 
 ## License and Authors
 
-Author:: YOUR_NAME (<YOUR_EMAIL>)
+Author:: Jamie Winsor (<jamie@vialstudios.com>)

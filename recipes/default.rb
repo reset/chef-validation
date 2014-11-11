@@ -2,9 +2,9 @@
 # Cookbook Name:: validation
 # Recipe:: default
 #
-# Copyright (C) 2014 Jamie Winsor
+# The MIT License (MIT)
 #
-# All rights reserved - Do Not Redistribute
+# Copyright (c) 2014 Jamie Winsor
 #
 
 chef_gem "chef-validation" do

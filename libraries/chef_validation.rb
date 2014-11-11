@@ -1,3 +1,12 @@
+#
+# Cookbook Name:: validation
+# Library:: chef_validation
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2014 Jamie Winsor
+#
+
 class Chef
   module ChefValidation
     class << self
