@@ -8,6 +8,8 @@
 #
 
 define :attribute_validation, mode: :converge, cookbook: nil do
+  include_recipe "validation::default"
+
   if params[:mode] == :compile
     errors = if params[:cookbook].nil?
       Chef::Log.info("attribute-validation for all cookbooks (compile time)")
