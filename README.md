@@ -1,4 +1,4 @@
-# validation-cookbook
+# chef-validation
 
 Perform validation on your node's attributes from a Cookbook's attribute metadata definitions.
 
