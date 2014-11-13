@@ -37,6 +37,11 @@ module Chef::Validation
         value  = HashExt.dig(node.attributes, name, ATTR_SEPARATOR)
         errors = []
 
+        if rules["recipes"].present?
+          if rules["recipes"].select { |recipe| recipe_present?(node, recipe) }.empty?
+            return errors
+          end
+        end
         if rules["required"].present?
           errors += validate_required(value, name)
         end
@@ -59,6 +64,17 @@ module Chef::Validation
         SYMBOL         = "symbol".freeze
         BOOLEAN        = "boolean".freeze
         NUMERIC        = "numeric".freeze
+
+        def recipe_present?(node, recipe)
+          cookbook, name = recipe.split("::", 2)
+          if name.blank?
+            # Check for default recipe by both of it's names.
+            expanded = "#{cookbook}::default"
+            node.recipe?(recipe) || node.recipe?(expanded)
+          else
+            node.recipe?(recipe)
+          end
+        end
 
         def validate_choice(value, choices, name)
           errors = []
