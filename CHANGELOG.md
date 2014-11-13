@@ -1,3 +1,9 @@
+# 0.1.3
+
+* Bug Fixes
+  * Fix issue on some versions of Chef where metadata would not be properly loaded at different points of the Chef run
+  * Fix crash when a value is `nil` and checking for it's presence
+
 # 0.1.2
 
 * Enhancements
