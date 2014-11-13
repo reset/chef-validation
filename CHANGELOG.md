@@ -1,3 +1,8 @@
+# 0.1.5
+
+* Bug Fixes
+  * Fix issue with running boolean type validations on Ruby 1.9 series
+
 # 0.1.4
 
 * Bug Fixes
