@@ -37,13 +37,13 @@ module Chef::Validation
         value  = HashExt.dig(node.attributes, name, ATTR_SEPARATOR)
         errors = []
 
-        if (rules["required"] == "required" || rules["required"] == true)
+        if rules["required"].present?
           errors += validate_required(value, name)
         end
-        unless rules["type"].nil?
+        if rules["type"].present?
           errors += validate_type(value, rules["type"], name)
         end
-        unless rules["choice"].nil? || rules["choice"].empty?
+        if rules["choice"].present?
           errors += validate_choice(value, rules["choice"], name)
         end
 
@@ -70,7 +70,7 @@ module Chef::Validation
 
         def validate_required(value, name)
           errors = []
-          if value.nil? || value.empty?
+          if value.present?
             errors << "Required attribute but was not present."
           end
           errors
