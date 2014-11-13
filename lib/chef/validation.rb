@@ -39,9 +39,17 @@ module Chef::Validation
 
     private
 
+      # It's quite sad, but metadata is not guaranteed to be 100% loaded depending on the
+      # version of Chef you are using and at which point of the Chef Client run you are at.
+      def reload_metadata(cookbook)
+        file = cookbook.root_filenames.find { |x| File.basename(x) == "metadata.json" }
+        cookbook.metadata.from_json(IO.read(file))
+      end
+
       def validate_all(node)
         total_errors = {}
         ContextExt.cookbooks(node.run_context).each do |cookbook|
+          reload_metadata(cookbook)
           unless (errors = Validator.run(node, cookbook.metadata)).empty?
             total_errors[cookbook.name] = errors
           end
@@ -54,6 +62,7 @@ module Chef::Validation
         unless cookbook = ContextExt.cookbook(node.run_context, name)
           raise "Cookbook not found: #{cookbook}"
         end
+        reload_metadata(cookbook)
         unless (errors = Validator.run(node, cookbook.metadata)).empty?
           total_errors[cookbook.name] = errors
         end
