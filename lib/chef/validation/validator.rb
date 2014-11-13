@@ -60,22 +60,25 @@ module Chef::Validation
         BOOLEAN        = "boolean".freeze
         NUMERIC        = "numeric".freeze
 
-        def validate_choice(value, choices, name, errors = [])
+        def validate_choice(value, choices, name)
+          errors = []
           unless choices.include?(value)
             errors << "Must be one of the following choices: #{choices.join(", ")}."
           end
           errors
         end
 
-        def validate_required(value, name, errors = [])
-          if value.empty? || value.nil?
+        def validate_required(value, name)
+          errors = []
+          if value.nil? || value.empty?
             errors << "Required attribute but was not present."
           end
           errors
         end
 
-        def validate_type(value, type, name, errors = [])
-          state = nil
+        def validate_type(value, type, name)
+          errors = []
+          state  = nil
           case type.downcase
           when STRING
             state = :error unless value.is_a?(String)
