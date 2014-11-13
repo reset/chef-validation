@@ -89,7 +89,7 @@ module Chef::Validation
           when SYMBOL
             state = :error unless value.is_a?(Symbol)
           when BOOLEAN
-            state = :error unless value.is_a?(Boolean)
+            state = :error unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
           when NUMERIC
             state = :error unless value.is_a?(Fixnum)
           else
