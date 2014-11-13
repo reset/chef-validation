@@ -1,3 +1,8 @@
+# 0.1.6
+
+* Bug Fixes
+  * Required attribute validations will once again pass if they have values present
+
 # 0.1.5
 
 * Bug Fixes
