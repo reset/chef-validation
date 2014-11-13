@@ -70,7 +70,7 @@ module Chef::Validation
 
         def validate_required(value, name)
           errors = []
-          if value.present?
+          if value.blank?
             errors << "Required attribute but was not present."
           end
           errors
