@@ -1,3 +1,8 @@
+# 0.1.4
+
+* Bug Fixes
+  * Fix issue with validating non-string required attributes
+
 # 0.1.3
 
 * Bug Fixes
