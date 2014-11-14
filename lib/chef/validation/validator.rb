@@ -86,6 +86,8 @@ module Chef::Validation
 
         def validate_required(value, name)
           errors = []
+          return errors if value.is_a?(TrueClass) || value.is_a?(FalseClass)
+
           if value.blank?
             errors << "Required attribute but was not present."
           end
