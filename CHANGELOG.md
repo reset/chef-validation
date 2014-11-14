@@ -1,3 +1,8 @@
+# 0.2.0
+
+* Enhancements
+  * Validations will not be run for attributes who are dependent upon recipes when those recipes are not in the expanded run list of the node.
+
 # 0.1.6
 
 * Bug Fixes
