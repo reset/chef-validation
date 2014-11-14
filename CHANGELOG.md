@@ -1,3 +1,8 @@
+# 0.2.1
+
+* Bug Fixes
+  * Don't treat 'false' as a missing required attribute
+
 # 0.2.0
 
 * Enhancements
