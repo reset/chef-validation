@@ -1,3 +1,8 @@
+# 0.2.2
+
+* Bug Fixes
+  * Allow `optional` and `recommended` to be passed in for `required` attribute rule. Fixes #1
+
 # 0.2.1
 
 * Bug Fixes

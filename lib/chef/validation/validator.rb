@@ -43,7 +43,7 @@ module Chef::Validation
           end
         end
         if rules["required"].present?
-          errors += validate_required(value, name)
+          errors += validate_required(rules["required"], value)
         end
         if rules["type"].present?
           errors += validate_type(value, rules["type"], name)
@@ -84,10 +84,15 @@ module Chef::Validation
           errors
         end
 
-        def validate_required(value, name)
+        def validate_required(required, value)
           errors = []
           return errors if value.is_a?(TrueClass) || value.is_a?(FalseClass)
 
+          if ['optional', 'recommended'].include?(required)
+            return errors
+          end
+
+          # Only required gets here
           if value.blank?
             errors << "Required attribute but was not present."
           end
