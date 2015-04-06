@@ -42,12 +42,25 @@ module Chef::Validation
             return errors
           end
         end
+
         if rules["required"].present?
           errors += validate_required(rules["required"], value)
+          # Bail out early
+          unless errors.empty?
+            return errors
+          end
         end
+
+        # Doing type / choice checks on optiona values when they are not present is no good
+        if (!rules["required"].present? or
+            ['optional', 'recommended', FalseClass].include?(rules["required"])) and value.nil?
+          return errors
+        end
+
         if rules["type"].present?
           errors += validate_type(value, rules["type"], name)
         end
+
         if rules["choice"].present?
           errors += validate_choice(value, rules["choice"], name)
         end
