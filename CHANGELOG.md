@@ -1,7 +1,10 @@
-# 0.2.2
+# 0.3.0
 
 * Bug Fixes
   * Allow `optional` and `recommended` to be passed in for `required` attribute rule. Fixes #1
+
+* Enhancements
+  * Validation of choices can now validate a value that is an array. For example an array of Postgres extensions inputted by a user against a master list
 
 # 0.2.1
 
