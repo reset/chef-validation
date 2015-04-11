@@ -25,8 +25,6 @@ module Chef::Validation
 
         key, rest = path.split(separator, 2)
         if hash.is_a?(Hash)
-          return nil unless hash.respond_to?(:has_key?)
-          return hash unless hash.respond_to?(:[])
           match = hash[key.to_s].nil? ? hash[key.to_sym] : hash[key.to_s]
         elsif hash.is_a?(Array)
           match = hash[key.to_i]
