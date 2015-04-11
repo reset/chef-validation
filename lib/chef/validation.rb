@@ -50,7 +50,7 @@ module Chef::Validation
         total_errors = {}
         ContextExt.cookbooks(node.run_context).each do |cookbook|
           reload_metadata(cookbook)
-          unless (errors = Validator.run(node, cookbook.metadata)).empty?
+          unless (errors = Validator.run(node.attributes, cookbook.metadata.attributes, node.to_hash['recipe'])).empty?
             total_errors[cookbook.name] = errors
           end
         end
@@ -63,7 +63,7 @@ module Chef::Validation
           raise "Cookbook not found: #{cookbook}"
         end
         reload_metadata(cookbook)
-        unless (errors = Validator.run(node, cookbook.metadata)).empty?
+        unless (errors = Validator.run(node.attributes, cookbook.metadata.attributes, node.to_hash['recipe'])).empty?
           total_errors[cookbook.name] = errors
         end
         total_errors
