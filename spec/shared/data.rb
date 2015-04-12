@@ -45,7 +45,15 @@ def node
           'device' => '/dev/sdo',
           'mount' => '/db'
         }
+<<<<<<< Updated upstream
       ]
+=======
+      ],
+      'types' => {
+        'arraystring1' => ['this', 'that'],
+        'arraystring2' => 'this, that',
+      }
+>>>>>>> Stashed changes
     }
   }
 end

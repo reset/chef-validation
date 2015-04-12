@@ -44,6 +44,25 @@ describe Chef::Validation::Validator do
         expect(described_class.validate(node, 'cookbook/fun/stuff', rules))
             .to eq(["Must be of type 'symbol' but got: String."])
       end
+<<<<<<< Updated upstream
+=======
+
+      context 'multiple types' do
+        it 'input is string, expect array or string' do
+          rules = {'type' => 'array, string'}
+          expect(described_class.validate(node, 'cookbook/types/arraystring2', rules)).to be_empty
+          expect(described_class.validate(node, 'cookbook/simba', rules))
+              .to eq(["Must be of type 'array, string' but got: Symbol."])          
+        end
+
+        it 'input is array, expect array or string' do
+          rules = {'type' => 'array, string'}
+          expect(described_class.validate(node, 'cookbook/types/arraystring1', rules)).to be_empty
+          expect(described_class.validate(node, 'cookbook/simba', rules))
+              .to eq(["Must be of type 'array, string' but got: Symbol."])
+        end
+      end
+>>>>>>> Stashed changes
     end
 
     context '#validate_choice' do
