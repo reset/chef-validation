@@ -122,16 +122,19 @@ module Chef::Validation
             end
 
             if state == :error
-              errors << "Must be of type '#{type}' but got: #{value.class}."
+              errors << "Must be of type '#{types}' but got: #{value.class}."
             end
           end
 
-          # If the errors equal the amount of types passed in then error out
-          if data.length > errors.length
+          # If more than one type is passed in do validation differently
+          if data.length > 1 and data.length < errors.length
+            # Means at least one type worked
             []
+          elsif data.length == errors.length
+            return errors.uniq
           end
 
-          errors
+          []
         end
     end
   end
