@@ -121,29 +121,38 @@ module Chef::Validation
           errors
         end
 
-        def validate_type(value, type, name)
+        def validate_type(value, types, name)
           errors = []
-          state  = nil
-          case type.downcase
-          when STRING
-            state = :error unless value.is_a?(String)
-          when ARRAY
-            state = :error unless value.is_a?(Array)
-          when HASH
-            state = :error unless value.is_a?(Hash) || value.is_a?(Mash)
-          when SYMBOL
-            state = :error unless value.is_a?(Symbol)
-          when BOOLEAN
-            state = :error unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
-          when NUMERIC
-            state = :error unless value.is_a?(Fixnum)
-          else
-            nil
+          data = types.split(',')
+          data.each do |type|
+            state  = nil
+            case type.strip.downcase
+            when STRING
+              state = :error unless value.is_a?(String)
+            when ARRAY
+              state = :error unless value.is_a?(Array)
+            when HASH
+              state = :error unless value.is_a?(Hash) || value.is_a?(Mash)
+            when SYMBOL
+              state = :error unless value.is_a?(Symbol)
+            when BOOLEAN
+              state = :error unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
+            when NUMERIC
+              state = :error unless value.is_a?(Fixnum)
+            else
+              nil
+            end
+
+            if state == :error
+              errors << "Must be of type '#{type}' but got: #{value.class}."
+            end
           end
 
-          if state == :error
-            errors << "Must be of type '#{type}' but got: #{value.class}."
+          # If the errors equal the amount of types passed in then error out
+          if data.length > errors.length
+            []
           end
+
           errors
         end
 
