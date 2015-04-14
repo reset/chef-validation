@@ -2,20 +2,21 @@ module Chef::Validation
   module Validator
     class << self
       # Validates that the given node object satisfies all of the attribute constraints
-      # found in the given metadata.
+      # found in the given metadata attributes.
       #
       # Returns a hash containing key/value pairs where the keys are the name of an
       # attribute which was not properly set on the node object and the values are
       # errors that were generated for that attribute.
       #
-      # @param [Chef::Node] node
-      # @param [Chef::Metadata] metadata
+      # @param [Hash]  node
+      # @param [Hash]  attributes
+      # @param [Array] recipes
       #
       # @return [Hash]
-      def run(node, metadata)
+      def run(node, attributes, recipes = {})
         errors = {}
-        metadata.attributes.each do |attribute, rules|
-          unless (err = validate(node, attribute, rules)).empty?
+        expand_attributes(node, attributes).each do |attribute, rules|
+          unless (err = validate(node, attribute, rules, recipes)).empty?
             errors[attribute] = err
           end
         end
@@ -25,29 +26,44 @@ module Chef::Validation
       # Validates that the given node object passes the given validation rules for
       # the given attribute name.
       #
-      # @param [Chef::Node] node
-      #   node to validate
+      # @param [Hash] node
+      #   node attributes to validate
       # @param [String] name
       #   name of the attribute to validate
       # @param [Hash] rules
       #   a hash of rules (defined by the metadata of a cookbook)
+      # @param [Array] recipes
+      #   recipes to validate against
       #
       # @return [Array<String>]
-      def validate(node, name, rules)
-        value  = HashExt.dig(node.attributes, name, ATTR_SEPARATOR)
+      def validate(node, name, rules, recipes = {})
+        value  = HashExt.dig(node, name, ATTR_SEPARATOR)
         errors = []
 
         if rules["recipes"].present?
-          if rules["recipes"].select { |recipe| recipe_present?(node, recipe) }.empty?
+          if rules["recipes"].select { |recipe| recipe_present?(recipes, recipe) }.empty?
             return errors
           end
         end
+
         if rules["required"].present?
-          errors += validate_required(rules["required"], value)
+          errors += validate_required(rules["required"], value, name)
+          # Bail out early
+          unless errors.empty?
+            return errors
+          end
         end
+
+        # Doing type / choice checks on optiona values when they are not present is no good
+        if (!rules["required"].present? or
+            ['optional', 'recommended', FalseClass].include?(rules["required"])) and value.nil?
+          return errors
+        end
+
         if rules["type"].present?
           errors += validate_type(value, rules["type"], name)
         end
+
         if rules["choice"].present?
           errors += validate_choice(value, rules["choice"], name)
         end
@@ -65,26 +81,32 @@ module Chef::Validation
         BOOLEAN        = "boolean".freeze
         NUMERIC        = "numeric".freeze
 
-        def recipe_present?(node, recipe)
+        def recipe_present?(recipes, recipe)
           cookbook, name = recipe.split("::", 2)
           if name.blank?
             # Check for default recipe by both of it's names.
             expanded = "#{cookbook}::default"
-            node.recipe?(recipe) || node.recipe?(expanded)
+            recipes.include?(recipe) || recipes.include?(expanded)
           else
-            node.recipe?(recipe)
+            recipes.include?(recipe)
           end
         end
 
         def validate_choice(value, choices, name)
           errors = []
-          unless choices.include?(value)
-            errors << "Must be one of the following choices: #{choices.join(", ")}."
+          if value.is_a?(Array)
+            unless value.select { |v| !choices.include?(v) }.empty?
+              errors << "Must be any of the following choices: #{choices.join(", ")}."
+            end
+          else
+            unless choices.include?(value)
+              errors << "Must be one of the following choices: #{choices.join(", ")}."
+            end
           end
           errors
         end
 
-        def validate_required(required, value)
+        def validate_required(required, value, name)
           errors = []
           return errors if value.is_a?(TrueClass) || value.is_a?(FalseClass)
 
@@ -94,7 +116,7 @@ module Chef::Validation
 
           # Only required gets here
           if value.blank?
-            errors << "Required attribute but was not present."
+            errors << "Attribute #{name} is required but was not present."
           end
           errors
         end
