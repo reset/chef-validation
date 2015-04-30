@@ -70,7 +70,7 @@ describe Chef::Validation::Validator do
         it 'choices exist' do
           rules = {
             'type' => 'array',
-            'choice' => ['production', 'secret', 'value']
+            'choices' => ['production', 'secret', 'value']
           }
           expect(described_class.validate(node, 'cookbook/fun/stuff2', rules)).to be_empty
         end
@@ -78,7 +78,7 @@ describe Chef::Validation::Validator do
         it 'choices do not exist' do
           rules = {
             'type' => 'array',
-            'choice' => ['production', 'public']
+            'choices' => ['production', 'public']
           }
           expect(described_class.validate(node, 'cookbook/fun/stuff2', rules))
               .to eq(["Must be any of the following choices: production, public."])
