@@ -51,6 +51,9 @@ module Chef::Validation
         if rules["choice"].present?
           errors += validate_choice(value, rules["choice"], name)
         end
+        if rules["choices"].present?
+          errors += validate_choice(value, rules["choices"], name)
+        end
 
         errors
       end
@@ -78,8 +81,14 @@ module Chef::Validation
 
         def validate_choice(value, choices, name)
           errors = []
-          unless choices.include?(value)
-            errors << "Must be one of the following choices: #{choices.join(", ")}."
+          if value.is_a?(Array)
+            unless value.select { |v| !choices.include?(v) }.empty?
+              errors << "Must be any of the following choices: #{choices.join(", ")}."
+            end
+          else
+            unless choices.include?(value)
+              errors << "Must be one of the following choices: #{choices.join(", ")}."
+            end
           end
           errors
         end
