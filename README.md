@@ -24,15 +24,17 @@ depends "validation"
 
 grouping "my_app",
   title: "My Application"
+
 attribute "my_app/log_level",
   required: "required",
   default: "debug",
-  choices: [
+  choice: [
     "debug",
     "fatal",
     "warn",
     "info"
   ]
+
 attribute "my_app/cookie",
   required: "required",
   default: "",
@@ -40,6 +42,23 @@ attribute "my_app/cookie",
 ```
 
 Attribute rules are already part of Chef metadata. However, they are not used at all by the Chef client application itself. You'll need to ensure that you still initialize attributes to their supposedly default value in an attributes file or a recipe.
+
+Allowed types:
+ * string
+ * hash
+ * array
+ * numeric (Fixnum)
+ * boolean (TrueClass, FalseClass)
+ * symbol
+
+Choice(s)
+
+There are two different fields for defining choices, `choice` and `choices`. As the name suggest
+the former (`choice`) is for when only one value can match and can work with any of the `type` and
+`choices` is meant for when you want to define multiple choices, such as when you want the user to
+enable/disable multiple postgresql extensions from an available list of items. This only works with `type` of `array`
+
+
 
 Since Chef client doesn't do anything with these attribute definitions we need to leverage the `validate_attributes` definition provided by this cookbook. Place a line like this in one of your cookbook's recipes.
 
