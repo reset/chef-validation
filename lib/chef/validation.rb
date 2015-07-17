@@ -60,7 +60,7 @@ module Chef::Validation
       def validate_one(node, name)
         total_errors = {}
         unless cookbook = ContextExt.cookbook(node.run_context, name)
-          raise "Cookbook not found: #{name}"
+          raise "Cookbook not found in run_context: #{name}"
         end
         reload_metadata(cookbook)
         unless (errors = Validator.run(node, cookbook.metadata)).empty?

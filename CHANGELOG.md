@@ -1,7 +1,8 @@
 # 0.2.2
 
 * Bug Fixes
-  * Allow `optional` and `recommended` to be passed in for `required` attribute rule. Fixes #1
+  * Allow `optional` and `recommended` to be passed in for `required` attribute rule
+  * Display name of cookbook in error when cookbook not in run list
 
 # 0.2.1
 
