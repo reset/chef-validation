@@ -1,3 +1,8 @@
+# 0.2.3
+
+* Enhancements
+  * Use Chef Gem compile_time option when available
+
 # 0.2.2
 
 * Bug Fixes
