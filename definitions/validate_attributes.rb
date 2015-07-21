@@ -4,7 +4,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 Jamie Winsor
+# Copyright (c) 2014-2015 Jamie Winsor
 #
 
 define :validate_attributes, mode: :converge, cookbook: nil do
