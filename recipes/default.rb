@@ -7,10 +7,18 @@
 # Copyright (c) 2014 Jamie Winsor
 #
 
-chef_gem "chef-validation" do
-  version Chef::Validation.cookbook_version(node)
-  options "--ignore-dependencies"
-  action :nothing
-end.run_action(:install)
+if Chef::Resource::ChefGem.instance_methods(false).include?(:compile_time)
+  chef_gem "chef-validation" do
+    version Chef::Validation.cookbook_version(node)
+    options "--ignore-dependencies"
+    compile_time true
+  end
+else
+  chef_gem "chef-validation" do
+    version Chef::Validation.cookbook_version(node)
+    options "--ignore-dependencies"
+    action :nothing
+  end.run_action(:install)
+end
 
 require "chef-validation"
